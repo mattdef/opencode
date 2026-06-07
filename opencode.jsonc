@@ -1,0 +1,85 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "autoupdate": true,
+  "permission": {
+    "*": "allow",
+  },
+  "model": "opencode-go/mimo-v2.5-pro",
+  "default_agent": "build",
+  "instructions": ["./prompts/general-guideline.md"],
+  "experimental": {
+    "disable_paste_summary": true,
+  },
+  "agent": {
+    "build": {
+      "description": "Primary coding agent that delegates command execution to @executor",
+      "model": "openai/gpt-5.4",
+      "variant": "xhigh",
+      "permission": {
+        "bash": "deny",
+      },
+      "prompt": "{file:./prompts/coding-guideline.md}",
+    },
+    "OneShoot": {
+      "description": "End-to-end implementation agent that plans, codes, and reviews in one run",
+      "model": "opencode-go/mimo-v2.5",
+      "variant": "high",
+      "permission": {
+        "bash": "deny",
+      },
+      "prompt": "{file:./prompts/oneshoot-guideline.md}",
+    },
+    "plan": {
+      "description": "Structured implementation planning",
+      "model": "openai/gpt-5.5",
+      "variant": "xhigh",
+      "prompt": "{file:./prompts/plan-guideline.md}",
+    },
+    "oneshoot-plan": {
+      "description": "Planning subagent for the OneShoot workflow",
+      "model": "openai/gpt-5.5",
+      "variant": "xhigh",
+      "mode": "subagent",
+      "prompt": "{file:./prompts/plan-guideline.md}",
+    },
+    "oneshoot-build": {
+      "description": "Coding subagent for the OneShoot workflow",
+      "model": "openai/gpt-5.4",
+      "variant": "xhigh",
+      "mode": "subagent",
+      "permission": {
+        "bash": "deny",
+      },
+      "prompt": "{file:./prompts/coding-guideline.md}",
+    },
+    "explore": {
+      "description": "Fast codebase exploration",
+      "model": "opencode-go/mimo-v2.5",
+      "variant": "high",
+      "prompt": "{file:./prompts/explore-guideline.md}",
+    },
+    "oneshoot-review": {
+      "description": "Review subagent for the OneShoot workflow",
+      "model": "opencode-go/qwen3.7-max",
+      "mode": "subagent",
+      "prompt": "{file:./prompts/review-guideline.md}",
+    },
+    "reviewer": {
+      "description": "Automated review agent",
+      "model": "opencode-go/qwen3.7-max",
+      "mode": "all",
+      "prompt": "Use code-review skill",
+    },
+    "executor": {
+      "description": "Default execution subagent for bash commands, tests, builds, and validation",
+      "model": "opencode-go/qwen3.7-plus",
+      "mode": "subagent",
+      "prompt": "{file:./prompts/executor-guideline.md}",
+    },
+  },
+  "plugin": [
+    "opencode-agent-skills",
+    "opencode-ntfy.sh",
+    "@plannotator/opencode@latest",
+  ],
+}
