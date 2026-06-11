@@ -18,6 +18,7 @@ Produce high-signal, evidence-based reviews focused on real risk. Write the find
 3. Robustness
 4. Performance
 5. Maintainability and test coverage
+6. UX/Design consistency (when applicable, use `@designer` subagent for design-focused review)
 
 ## Do Not Report
 

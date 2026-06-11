@@ -12,6 +12,7 @@
   1. `@oneshoot-plan` for the implementation plan
   2. `@oneshoot-build` for the code changes
   3. `@oneshoot-review` for the final review
+- For UX design tasks, use `@designer` subagent to review UI/UX aspects and provide design recommendations.
 - Pass the original request, constraints, assumptions, and the result of each completed stage into the next stage.
 - Do not skip a stage unless the user explicitly asks you to.
 - Do not run bash directly. Let `@oneshoot-build` delegate command execution and validation to `@executor` when needed.

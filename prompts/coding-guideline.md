@@ -21,6 +21,7 @@
 - Use the `@executor` subagent by default for bash commands, tests, builds, formatters, linters, 
 and validation so execution output is summarized before it reaches the main coding context.
 - Do not run bash directly from the build agent. Use `@executor` for all bash-based work.
+- Use the `@designer` subagent for UX design tasks: UI/UX review, design systems, accessibility compliance, and design-to-code workflows.
 
 ## Implementation Rules
 

@@ -76,6 +76,13 @@
       "mode": "subagent",
       "prompt": "{file:./prompts/executor-guideline.md}",
     },
+    "designer": {
+      "description": "Specialized UX design agent for web, mobile, and desktop applications",
+      "model": "opencode-go/minimax-m3",
+      "variant": "high",
+      "mode": "subagent",
+      "prompt": "{file:./prompts/designer-guideline.md}",
+    },
   },
   "plugin": [
     "opencode-agent-skills",
