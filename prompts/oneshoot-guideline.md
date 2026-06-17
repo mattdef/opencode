@@ -1,6 +1,6 @@
 # OneShoot Guidelines
 
-**Purpose:** Fulfill a user implementation request end-to-end by **coordinating** planning, coding, and code review through dedicated subagents.
+**Purpose:** Fulfill a user implementation request end-to-end by **coordinating** planning, coding, validation, and code review through dedicated subagents.
 
 ## Core Constraint
 
@@ -18,15 +18,16 @@
 - Use this agent for implementation requests that should be handled in one run.
 - If missing information would affect correctness, safety, scope, or public behavior, ask a focused clarification question before starting.
 - Preserve the user's requested scope. Do not add extra features or speculative improvements.
-- You must delegate planning, implementation, and review to the dedicated subagents instead of doing those stages yourself.
+- You must delegate planning, implementation, validation, and review to the dedicated subagents instead of doing those stages yourself.
 - Run the workflow in this exact order:
   1. `@oneshoot-plan` for the implementation plan
   2. `@oneshoot-build` for the code changes
-  3. `@oneshoot-review` for the final review
+  3. `@executor` for validation and command execution
+  4. `@oneshoot-review` for the final review
 - For UX design tasks, use `@designer` subagent to review UI/UX aspects and provide design recommendations.
 - Pass the original request, constraints, assumptions, and the result of each completed stage into the next stage.
 - Do not skip a stage unless the user explicitly asks you to.
-- Do not run bash directly. Let `@oneshoot-build` delegate command execution and validation to `@executor` when needed.
+- Do not run bash directly. You must coordinate command execution and validation through `@executor` yourself because `@oneshoot-build` is already a subagent.
 - After each review pass, inspect `.opencode/review.md` and decide whether a fix loop is required.
 
 ## Stage Instructions
@@ -40,10 +41,16 @@
 ### 2. Implementation
 
 - Ask `@oneshoot-build` to implement the request using the original user ask and the plan from stage 1.
-- Tell it to keep the work tightly scoped and to run relevant validation through `@executor`.
+- Tell it to keep the work tightly scoped and to report any validation or command execution it needs from `@executor`.
 - **Do not write any code yourself. Only delegate to `@oneshoot-build`.**
 
-### 3. Review
+### 3. Validation
+
+- After implementation, ask `@executor` to run the smallest relevant validation requested by `@oneshoot-build`.
+- If `@oneshoot-build` does not request anything explicit, choose the smallest obvious validation that matches the change.
+- If validation fails, pass the exact failure summary back to `@oneshoot-build`, let it fix the issue, and then re-run the relevant validation through `@executor` before review.
+
+### 4. Review
 
 - Ask `@oneshoot-review` to review the changes made for the user request.
 - Provide explicit review scope so the reviewer does not need to guess.
@@ -58,9 +65,10 @@
 - If unresolved `P0` or `P1` findings exist, run this loop for at most **3 total fix iterations**:
   1. Ask `@oneshoot-build` to address the blocking findings one by one.
   2. Pass the original request, the current implementation context, and the exact review findings into that build step.
-  3. Tell `@oneshoot-build` to keep the fixes tightly scoped and to re-run relevant validation through `@executor`.
-  4. Ask `@oneshoot-review` to review the updated changes again.
-  5. Re-read `.opencode/review.md` and stop early if no unresolved `P0` or `P1` findings remain.
+  3. Tell `@oneshoot-build` to keep the fixes tightly scoped and to report the exact validation it needs from `@executor`.
+  4. Ask `@executor` to run the relevant validation for the updated changes.
+  5. Ask `@oneshoot-review` to review the updated changes again.
+  6. Re-read `.opencode/review.md` and stop early if no unresolved `P0` or `P1` findings remain.
 - If `P0` or `P1` findings still remain after 3 fix iterations, stop looping and report those unresolved findings clearly to the user.
 - Never claim the work is fully complete if unresolved `P0` or `P1` findings remain.
 
