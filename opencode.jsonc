@@ -21,7 +21,7 @@
       "prompt": "{file:./prompts/coding-guideline.md}",
     },
     "OneShoot": {
-      "description": "End-to-end implementation agent that plans, codes, and reviews in one run",
+      "description": "Coordination-only agent that delegates planning, coding, and review to dedicated subagents (@oneshoot-plan, @oneshoot-build, @oneshoot-review). NEVER implements, plans, or codes directly.",
       "model": "opencode-go/mimo-v2.5",
       "variant": "high",
       "permission": {
@@ -55,24 +55,24 @@
     "explore": {
       "description": "Fast codebase exploration",
       "model": "opencode-go/mimo-v2.5",
-      "variant": "high",
+      "variant": "max",
       "prompt": "{file:./prompts/explore-guideline.md}",
     },
     "oneshoot-review": {
       "description": "Review subagent for the OneShoot workflow",
-      "model": "opencode-go/qwen3.7-max",
+      "model": "opencode-go/deepseek-v4-pro",
       "mode": "subagent",
       "prompt": "{file:./prompts/review-guideline.md}",
     },
     "reviewer": {
       "description": "Automated review agent",
-      "model": "opencode-go/qwen3.7-max",
+      "model": "opencode-go/deepseek-v4-pro",
       "mode": "all",
       "prompt": "Use code-review skill",
     },
     "executor": {
       "description": "Default execution subagent for bash commands, tests, builds, and validation",
-      "model": "opencode-go/qwen3.7-plus",
+      "model": "opencode-go/mimo-v2.5-pro",
       "mode": "subagent",
       "prompt": "{file:./prompts/executor-guideline.md}",
     },
@@ -83,10 +83,24 @@
       "mode": "subagent",
       "prompt": "{file:./prompts/designer-guideline.md}",
     },
+    "trading": {
+      "description": "Expert trading agent specialized in scalping, ICT/SMC concepts, and market analysis",
+      "model": "opencode-go/minimax-m3",
+      "variant": "high",
+      "mode": "all",
+      "prompt": "{file:./prompts/trading-guideline.md}",
+    },
   },
   "plugin": [
     "opencode-agent-skills",
     "opencode-ntfy.sh",
     "@plannotator/opencode@latest",
   ],
+  "mcp": {
+    "tradingview": {
+      "type": "local",
+      "command": ["node", "/home/matt/GitHub/tradingview-mcp/src/server.js"],
+      "enabled": true,
+    },
+  },
 }
