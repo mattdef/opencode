@@ -91,11 +91,7 @@
       "prompt": "{file:./prompts/trading-guideline.md}",
     },
   },
-  "plugin": [
-    "opencode-agent-skills",
-    "opencode-ntfy.sh",
-    "@plannotator/opencode@latest",
-  ],
+  "plugin": ["opencode-agent-skills", "opencode-ntfy.sh"],
   "mcp": {
     "tradingview": {
       "type": "local",
