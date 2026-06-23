@@ -20,6 +20,12 @@
       },
       "prompt": "{file:./prompts/coding-guideline.md}",
     },
+    "plan": {
+      "description": "Structured implementation planning",
+      "model": "openai/gpt-5.5",
+      "variant": "xhigh",
+      "prompt": "{file:./prompts/plan-guideline.md}",
+    },
     "OneShoot": {
       "description": "Coordination-only agent that delegates planning, coding, validation, and review to dedicated subagents (@oneshoot-plan, @oneshoot-build, @executor, @oneshoot-review). NEVER implements, plans, or codes directly.",
       "model": "opencode-go/mimo-v2.5",
@@ -28,12 +34,6 @@
         "bash": "deny",
       },
       "prompt": "{file:./prompts/oneshoot-guideline.md}",
-    },
-    "plan": {
-      "description": "Structured implementation planning",
-      "model": "openai/gpt-5.5",
-      "variant": "xhigh",
-      "prompt": "{file:./prompts/plan-guideline.md}",
     },
     "oneshoot-plan": {
       "description": "Planning subagent for the OneShoot workflow that creates implementation plans with its own tools and asks its caller to coordinate any extra execution or design work",
@@ -47,7 +47,7 @@
     },
     "oneshoot-build": {
       "description": "Coding subagent for the OneShoot workflow that edits files directly and asks its caller to coordinate validation via @executor",
-      "model": "openai/gpt-5.4",
+      "model": "openai/gpt-5.4-mini",
       "variant": "xhigh",
       "mode": "subagent",
       "permission": {
@@ -55,20 +55,21 @@
       },
       "prompt": "{file:./prompts/oneshoot-build-guideline.md}",
     },
-    "explore": {
-      "description": "Fast codebase exploration",
-      "model": "opencode-go/mimo-v2.5",
-      "variant": "max",
-      "prompt": "{file:./prompts/explore-guideline.md}",
-    },
     "oneshoot-review": {
       "description": "Review subagent for the OneShoot workflow that writes findings to .opencode/review.md and asks its caller to coordinate any extra validation or design review",
-      "model": "opencode-go/deepseek-v4-pro",
+      "model": "openai/gpt-5.4",
+      "variant": "xhigh",
       "mode": "subagent",
       "permission": {
         "bash": "deny",
       },
       "prompt": "{file:./prompts/oneshoot-review-guideline.md}",
+    },
+    "explore": {
+      "description": "Fast codebase exploration",
+      "model": "opencode-go/mimo-v2.5",
+      "variant": "max",
+      "prompt": "{file:./prompts/explore-guideline.md}",
     },
     "reviewer": {
       "description": "Automated review agent",
