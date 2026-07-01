@@ -32,6 +32,15 @@
       "variant": "high",
       "permission": {
         "bash": "deny",
+        "task": {
+          "*": "deny",
+          "oneshoot-plan": "allow",
+          "oneshoot-build": "allow",
+          "oneshoot-review": "allow",
+          "explore": "allow",
+          "executor": "allow",
+          "designer": "allow",
+        },
       },
       "prompt": "{file:./prompts/oneshoot-guideline.md}",
     },
@@ -42,6 +51,7 @@
       "mode": "subagent",
       "permission": {
         "bash": "deny",
+        "task": "deny",
       },
       "prompt": "{file:./prompts/oneshoot-plan-guideline.md}",
     },
@@ -52,6 +62,7 @@
       "mode": "subagent",
       "permission": {
         "bash": "deny",
+        "task": "deny",
       },
       "prompt": "{file:./prompts/oneshoot-build-guideline.md}",
     },
@@ -62,6 +73,7 @@
       "mode": "subagent",
       "permission": {
         "bash": "deny",
+        "task": "deny",
       },
       "prompt": "{file:./prompts/oneshoot-review-guideline.md}",
     },
@@ -69,6 +81,9 @@
       "description": "Fast codebase exploration",
       "model": "opencode-go/mimo-v2.5",
       "variant": "max",
+      "permission": {
+        "task": "deny",
+      },
       "prompt": "{file:./prompts/explore-guideline.md}",
     },
     "reviewer": {
@@ -81,6 +96,9 @@
       "description": "Default execution subagent for bash commands, tests, builds, and validation",
       "model": "opencode-go/mimo-v2.5-pro",
       "mode": "subagent",
+      "permission": {
+        "task": "deny",
+      },
       "prompt": "{file:./prompts/executor-guideline.md}",
     },
     "designer": {
@@ -88,6 +106,9 @@
       "model": "opencode-go/minimax-m3",
       "variant": "high",
       "mode": "subagent",
+      "permission": {
+        "task": "deny",
+      },
       "prompt": "{file:./prompts/designer-guideline.md}",
     },
     "trading": {

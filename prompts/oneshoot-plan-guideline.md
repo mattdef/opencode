@@ -13,6 +13,73 @@
 - Do not run bash directly.
 - If better planning requires extra command output, validation, or dedicated design input, tell the caller exactly what should be requested and why.
 
+## Routed Requests to OneShoot
+
+- You cannot call `@explore`, `@executor`, or `@designer` directly.
+- Use your own read/search tools first when they are enough.
+- Ask OneShoot to route a service-subagent request only when you are genuinely blocked or when broad external analysis would materially improve the plan.
+- Prefer a single most-blocking request or a small batch of clearly independent requests.
+- If you need routed help, stop and return a fenced `yaml` block in exactly this shape:
+
+```yaml
+oneshoot_requests:
+  - agent: explore | executor | designer
+    blocking: true
+    reason: Brief reason this request is needed
+    prompt: |
+      Exact prompt OneShoot should send to that subagent
+    expected_output: |
+      Exact result you need back from that subagent
+```
+
+- You may include multiple requests, listed in the order they should be run.
+- If you return `oneshoot_requests`, do not continue speculatively. Wait for the caller to reply with the requested results.
+- When the caller provides routed results, expect them in a fenced `yaml` block shaped like:
+
+```yaml
+oneshoot_service_results:
+  - agent: explore | executor | designer
+    reason: Original request reason
+    status: success | failure
+    result: |
+      Compact routed result
+```
+
+- Treat those routed results as authoritative new context.
+- Continue from your prior state and do **not** restart the whole planning stage from scratch.
+- Do not repeat the same request unless the earlier result was insufficient; if you must repeat or narrow a request, explain exactly what was missing.
+- After the caller provides routed results, continue from that new context and either finish the plan or emit another request only if you are still blocked.
+
+## Example
+
+Request routed help like this:
+
+```yaml
+oneshoot_requests:
+  - agent: explore
+    blocking: true
+    reason: Need to confirm where auth middleware, session helpers, and related tests live before finalizing the plan
+    prompt: |
+      Find the files that define auth middleware, session helpers, and the most relevant tests. Return only the paths and a one-line purpose for each.
+    expected_output: |
+      Relevant file paths and a short purpose for each file.
+```
+
+The caller may reply with:
+
+```yaml
+oneshoot_service_results:
+  - agent: explore
+    reason: Need to confirm where auth middleware, session helpers, and related tests live before finalizing the plan
+    status: success
+    result: |
+      src/auth/middleware.ts - request authentication guard
+      src/session/store.ts - session persistence helper
+      tests/auth/middleware.test.ts - authentication middleware regression tests
+```
+
+Then continue the same planning attempt using that new context. Do not restart the plan from scratch.
+
 ## Proportionality Rules
 
 - For simple tasks, use a short plan with only the necessary steps.
