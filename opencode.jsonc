@@ -68,8 +68,8 @@
     },
     "oneshoot-review": {
       "description": "Review subagent for the OneShoot workflow that writes findings to .opencode/review.md and asks its caller to coordinate any extra validation or design review",
-      "model": "openai/gpt-5.4",
-      "variant": "xhigh",
+      "model": "opencode-go/glm-5.2",
+      "variant": "max",
       "mode": "subagent",
       "permission": {
         "bash": "deny",
@@ -79,7 +79,7 @@
     },
     "explore": {
       "description": "Fast codebase exploration",
-      "model": "opencode-go/mimo-v2.5",
+      "model": "opencode-go/deepseek-v4-flash",
       "variant": "max",
       "permission": {
         "task": "deny",
