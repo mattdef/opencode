@@ -13,8 +13,8 @@
   "agent": {
     "build": {
       "description": "Primary coding agent that delegates command execution to @executor",
-      "model": "openai/gpt-5.4",
-      "variant": "xhigh",
+      "model": "openai/gpt-5.6-luna",
+      "variant": "high",
       "permission": {
         "bash": "deny",
       },
@@ -22,7 +22,7 @@
     },
     "plan": {
       "description": "Structured implementation planning",
-      "model": "openai/gpt-5.5",
+      "model": "openai/gpt-5.6-sol",
       "variant": "xhigh",
       "prompt": "{file:./prompts/plan-guideline.md}",
     },
@@ -46,7 +46,7 @@
     },
     "oneshoot-plan": {
       "description": "Planning subagent for the OneShoot workflow that creates implementation plans with its own tools and asks its caller to coordinate any extra execution or design work",
-      "model": "openai/gpt-5.5",
+      "model": "openai/gpt-5.6-sol",
       "variant": "xhigh",
       "mode": "subagent",
       "permission": {
@@ -57,8 +57,8 @@
     },
     "oneshoot-build": {
       "description": "Coding subagent for the OneShoot workflow that edits files directly and asks its caller to coordinate validation via @executor",
-      "model": "openai/gpt-5.4-mini",
-      "variant": "xhigh",
+      "model": "openai/gpt-5.6-luna",
+      "variant": "high",
       "mode": "subagent",
       "permission": {
         "bash": "deny",
@@ -123,7 +123,7 @@
   "mcp": {
     "tradingview": {
       "type": "local",
-      "command": ["node", "/home/matt/GitHub/tradingview-mcp/src/server.js"],
+      "command": ["node", "/home/matt/Trading/tradingview-mcp/src/server.js"],
       "enabled": true,
     },
   },
