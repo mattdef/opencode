@@ -13,23 +13,21 @@
   "agent": {
     "build": {
       "description": "Primary coding agent that delegates command execution to @executor",
-      "model": "openai/gpt-5.6-luna",
-      "variant": "high",
+      "model": "opencode-go/deepseek-v4-flash",
+      "variant": "max",
       "permission": {
         "bash": "deny",
       },
-      "prompt": "{file:./prompts/coding-guideline.md}",
     },
     "plan": {
       "description": "Structured implementation planning",
-      "model": "openai/gpt-5.6-sol",
-      "variant": "xhigh",
-      "prompt": "{file:./prompts/plan-guideline.md}",
+      "model": "opencode-go/deepseek-v4-pro",
+      "variant": "max",
     },
     "OneShoot": {
       "description": "Coordination-only agent that delegates planning, coding, validation, and review to dedicated subagents (@oneshoot-plan, @oneshoot-build, @executor, @oneshoot-review). NEVER implements, plans, or codes directly.",
-      "model": "opencode-go/mimo-v2.5",
-      "variant": "high",
+      "model": "opencode-go/gpt-5.6-luna",
+      "variant": "medium",
       "permission": {
         "bash": "deny",
         "task": {
@@ -46,8 +44,8 @@
     },
     "oneshoot-plan": {
       "description": "Planning subagent for the OneShoot workflow that creates implementation plans with its own tools and asks its caller to coordinate any extra execution or design work",
-      "model": "openai/gpt-5.6-sol",
-      "variant": "xhigh",
+      "model": "opencode-go/deepseek-v4-pro",
+      "variant": "max",
       "mode": "subagent",
       "permission": {
         "bash": "deny",
@@ -57,8 +55,8 @@
     },
     "oneshoot-build": {
       "description": "Coding subagent for the OneShoot workflow that edits files directly and asks its caller to coordinate validation via @executor",
-      "model": "openai/gpt-5.6-luna",
-      "variant": "high",
+      "model": "opencode-go/deepseek-v4-flash",
+      "variant": "max",
       "mode": "subagent",
       "permission": {
         "bash": "deny",
@@ -68,7 +66,7 @@
     },
     "oneshoot-review": {
       "description": "Review subagent for the OneShoot workflow that writes findings to .opencode/review.md and asks its caller to coordinate any extra validation or design review",
-      "model": "opencode-go/glm-5.2",
+      "model": "opencode-go/gpt-5.6-luna",
       "variant": "max",
       "mode": "subagent",
       "permission": {
@@ -80,7 +78,7 @@
     "explore": {
       "description": "Fast codebase exploration",
       "model": "opencode-go/deepseek-v4-flash",
-      "variant": "max",
+      "variant": "high",
       "permission": {
         "task": "deny",
       },
@@ -88,13 +86,15 @@
     },
     "reviewer": {
       "description": "Automated review agent",
-      "model": "opencode-go/deepseek-v4-pro",
+      "model": "opencode-go/gpt-5.6-luna",
+      "variant": "max",
       "mode": "all",
       "prompt": "Use code-review skill",
     },
     "executor": {
       "description": "Default execution subagent for bash commands, tests, builds, and validation",
-      "model": "opencode-go/mimo-v2.5-pro",
+      "model": "opencode-go/deepseek-v4-flash",
+      "variant": "high",
       "mode": "subagent",
       "permission": {
         "task": "deny",
@@ -114,7 +114,6 @@
     "trading": {
       "description": "Expert trading agent specialized in scalping, ICT/SMC concepts, and market analysis",
       "model": "opencode-go/minimax-m3",
-      "variant": "high",
       "mode": "all",
       "prompt": "{file:./prompts/trading-guideline.md}",
     },
