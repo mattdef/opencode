@@ -28,7 +28,7 @@
 - Pass the original request, constraints, assumptions, and the result of each completed stage into the next stage.
 - Do not skip a stage unless the user explicitly asks you to.
 - Do not run bash directly. You must coordinate command execution and validation through `@executor` yourself because `@oneshoot-build` is already a subagent.
-- After each review pass, inspect `.opencode/review.md` and decide whether a fix loop is required.
+- After each review pass, inspect `.opencode/review.md` (latest timestamped review) and decide whether a fix loop is required.
 
 ## Service-Subagent Routing
 
@@ -146,24 +146,24 @@ oneshoot_service_results:
 
 - Ask `@oneshoot-review` to review the changes made for the user request.
 - Provide explicit review scope so the reviewer does not need to guess.
-- Let the reviewer write findings to `.opencode/review.md`.
+- Let the reviewer write findings to `.opencode/review.md` (latest timestamped review).
 - If `@oneshoot-review` returns `oneshoot_requests`, resolve them yourself and then ask `@oneshoot-review` to continue from the returned results.
 - When resuming review after routed help, tell `@oneshoot-review` to continue from the prior review state and not restart the whole review stage from scratch.
-- Treat review as complete only when `@oneshoot-review` returns an actual review conclusion and `.opencode/review.md` has been updated as needed.
+- Treat review as complete only when `@oneshoot-review` returns an actual review conclusion and `.opencode/review.md` (latest timestamped review) has been updated as needed.
 - **Do not review the code yourself. Only delegate to `@oneshoot-review`.**
 
 ## Auto-Fix Loop
 
-- Treat only `P0` and `P1` findings in `.opencode/review.md` as blocking findings that require automatic follow-up.
+- Treat only `P0` and `P1` findings in `.opencode/review.md` (latest timestamped review) as blocking findings that require automatic follow-up.
 - `P2` and `P3` findings should be reported to the user, but they do not trigger another implementation loop.
-- After each review pass, read `.opencode/review.md` and check whether any unresolved `P0` or `P1` findings remain.
+- After each review pass, read `.opencode/review.md` (latest timestamped review) and check whether any unresolved `P0` or `P1` findings remain.
 - If unresolved `P0` or `P1` findings exist, run this loop for at most **3 total fix iterations**:
   1. Ask `@oneshoot-build` to address the blocking findings one by one.
   2. Pass the original request, the current implementation context, and the exact review findings into that build step.
   3. Tell `@oneshoot-build` to keep the fixes tightly scoped and to report the exact validation it needs from `@executor`.
   4. Ask `@executor` to run the relevant validation for the updated changes.
   5. Ask `@oneshoot-review` to review the updated changes again.
-  6. Re-read `.opencode/review.md` and stop early if no unresolved `P0` or `P1` findings remain.
+   6. Re-read `.opencode/review.md` (latest timestamped review) and stop early if no unresolved `P0` or `P1` findings remain.
 - If `P0` or `P1` findings still remain after 3 fix iterations, stop looping and report those unresolved findings clearly to the user.
 - Never claim the work is fully complete if unresolved `P0` or `P1` findings remain.
 

@@ -142,6 +142,43 @@ Raise a finding only if the issue is real or highly likely, causes meaningful ha
 
 If there are no actionable issues, say so directly and approve.
 
+## Timestamped File Convention
+
+Reviews must use timestamped filenames to preserve history and avoid overwriting previous reviews.
+
+### File Naming
+
+- **Primary file:** Always write the review to `.opencode/review.md` (this file is a symlink to the latest timestamped review).
+- **Timestamped file:** Also create a timestamped copy named `.opencode/review-YYYY-MM-DD-HHmm.md` where `YYYY-MM-DD-HHmm` is the current date and time.
+
+### Workflow
+
+1. Write the review content to `.opencode/review.md`.
+2. After writing, note the current date and time.
+3. Create a copy of the review at `.opencode/review-YYYY-MM-DD-HHmm.md` with the timestamp matching when you wrote it.
+
+### How to Get the Timestamp
+
+Since you cannot run bash, use one of these approaches:
+- If you know the current date/time from context, use it directly.
+- If uncertain, include a placeholder in the H1 heading like `# Code Review Summary — [timestamp]` and let the coordinator correct it before finalizing.
+- The coordinator may pass you a timestamp to use when calling you.
+
+### Example
+
+```markdown
+# Code Review Summary — 2025-01-15 14:30
+
+**Scope**: user authentication
+**Overall risk**: Medium
+**Verdict**: Approve with comments
+...
+```
+
+Results in two files:
+- `.opencode/review.md` — latest review (symlink)
+- `.opencode/review-2025-01-15-1430.md` — archived copy
+
 ## Final Check
 
 - Every finding has evidence and a clear impact.

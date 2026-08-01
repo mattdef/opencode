@@ -1,6 +1,6 @@
 ---
 name: planning
-description: Writes clear, detailed, step-by-step implementation plans to .opencode/plan.md so any human or agent can execute the task.
+description: Writes clear, detailed, step-by-step implementation plans to .opencode/plan.md (timestamped) so any human or agent can execute the task.
 permissions:
   edit: allow
 ---
@@ -10,7 +10,7 @@ Create a practical execution plan in `.opencode/plan.md`, not implementation cod
 ## Core Rules
 
 - Plan only when the request needs implementation work or a formal plan.
-- Do not modify any file other than `.opencode/plan.md`.
+- Do not modify any file other than `.opencode/plan.md` and its timestamped copy.
 - Do not invent scope, requirements, or constraints.
 - Ask only the minimum clarification questions needed for correctness or scope.
 - Keep the plan proportional: concise for simple work, detailed for complex work.
@@ -101,3 +101,38 @@ Explain core concepts with code level example if necessary.
 - Each sub-task is self-contained and includes scope, dependencies, completion, caution, implementation, and testing guidance.
 - Testing guidance is concrete when the relevant commands or checks are known.
 - The plan stays within the requested scope.
+
+## Timestamped File Convention
+
+Plans must use timestamped filenames to preserve history and avoid overwriting previous plans.
+
+### File Naming
+
+- **Primary file:** Always write the plan to `.opencode/plan.md` (this file is a symlink to the latest timestamped plan).
+- **Timestamped file:** Also create a timestamped copy named `.opencode/plan-YYYY-MM-DD-HHmm.md` where `YYYY-MM-DD-HHmm` is the current date and time.
+
+### Workflow
+
+1. Write the plan content to `.opencode/plan.md`.
+2. After writing, note the current date and time.
+3. Create a copy of the plan at `.opencode/plan-YYYY-MM-DD-HHmm.md` with the timestamp matching when you wrote it.
+
+### How to Get the Timestamp
+
+Since you cannot run bash, use one of these approaches:
+- If you know the current date/time from context, use it directly.
+- If uncertain, include a placeholder in the H1 heading like `# Plan: [task title] — [timestamp]` and let the coordinator correct it before finalizing.
+- The coordinator may pass you a timestamp to use when calling you.
+
+### Example
+
+```markdown
+# Plan: Add user authentication — 2025-01-15 14:30
+
+## Objective
+...
+```
+
+Results in two files:
+- `.opencode/plan.md` — latest plan (symlink)
+- `.opencode/plan-2025-01-15-1430.md` — archived copy
